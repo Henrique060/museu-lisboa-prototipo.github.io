@@ -3,34 +3,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
-
-    <script>
-  const startButton = document.querySelector('#startButton');
-  const video = document.querySelector('#video');
-  const overlay = document.querySelector('#overlay');
-
-  startButton.addEventListener('click', () => {
-    // 1. Play the video immediately (even if target isn't seen yet)
-    // This "unlocks" the video element for iOS
-    video.play();
-    
-    // 2. Hide the overlay
-    overlay.style.display = 'none';
-    
-    // 3. (Optional) If you want sound, you can try unmuting here, 
-    // but many browsers still block unmuted autoplay.
-    // video.muted = false; 
-  });
-
-  // Listener to handle the video when the target is actually found
-  const videoTarget = document.querySelector('[mindar-image-target="targetIndex: 3"]');
-  videoTarget.addEventListener("targetFound", event => {
-    console.log("Video target found");
-    video.play();
-  });
-</script>
-
-
   </head>
   <body>
     <a-scene mindar-image="imageTargetSrc: ./public/markers/panfletoVasoSufr.mind;" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
