@@ -5,7 +5,7 @@
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
   </head>
   <body>
-    <a-scene mindar-image="imageTargetSrc: palacioPimenta.mind;" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
+    <a-scene mindar-image="imageTargetSrc: panfletoCVaso.mind;" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
       <a-assets>
         <a-asset-item id="avatarModel" src="estatualisboa.glb"></a-asset-item>
         <a-asset-item id="vaseModel" src="vase.glb"></a-asset-item>
@@ -16,7 +16,8 @@
         <a-gltf-model rotation="0 -70 0 " position="0 -0.5 0.1" scale="0.03 0.03 0.03" src="#avatarModel" animation="property: position; to: 0 -0.5 0.1; dur: 1000; easing: easeInOutQuad; loop: true; dir: alternate">
         </a-gltf-model>
       </a-entity>
-      <a-entity mindar-image-target="targetIndex: 1">
+      
+      <a-entity mindar-image-target="targetIndex: 2">
         <a-gltf-model rotation="90 0 0" position="0 0 0" scale="1 1 1" src="#vaseModel">
         </a-gltf-model>
       </a-entity>
