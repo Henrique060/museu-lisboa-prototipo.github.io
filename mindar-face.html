@@ -5,15 +5,41 @@
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
   </head>
   <body>
-    <a-scene mindar-face embedded color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
-      <a-assets>
-	<a-asset-item id="glassesModel" src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/face-tracking/assets/glasses/scene.gltf"></a-asset-item>
-      </a-assets>
 
-      <a-camera active="false" position="0 0 0"></a-camera>
-      <a-entity mindar-face-target="anchorIndex: 168">
-	<a-gltf-model rotation="0 0 0" position="0 0 0" scale="0.01 0.01 0.01" src="#glassesModel"></a-gltf-model>
-      </a-entity>
-    </a-scene>
+    <div id="ui">
+  <button id="startButton" style="position:fixed; z-index:999; top:20px; left:20px;">Start Camera</button>
+</div>
+
+<a-scene 
+  mindar-face="autoStart: false" 
+  embedded 
+  color-space="sRGB" 
+  renderer="colorManagement: true, physicallyCorrectLights" 
+  vr-mode-ui="enabled: false" 
+  device-orientation-permission-ui="enabled: false">
+  
+  <a-assets>
+    <a-asset-item id="glassesModel" src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/face-tracking/assets/glasses/scene.gltf"></a-asset-item>
+  </a-assets>
+
+  <a-camera active="false" position="0 0 0" look-controls="enabled: false"></a-camera>
+  
+  <a-entity mindar-face-target="anchorIndex: 168">
+    <a-gltf-model rotation="0 0 0" position="0 0 0" scale="0.01 0.01 0.01" src="#glassesModel"></a-gltf-model>
+  </a-entity>
+</a-scene>
+
+<script>
+  const startButton = document.querySelector("#startButton");
+  const sceneEl = document.querySelector('a-scene');
+
+  startButton.addEventListener('click', () => {
+    // Manually start the AR system after a user click
+    const arSystem = sceneEl.systems["mindar-face-system"];
+    arSystem.start(); 
+    startButton.style.display = 'none';
+  });
+</script>
+
   </body>
 </html>
