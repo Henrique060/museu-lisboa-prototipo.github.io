@@ -49,18 +49,33 @@
 
 
     <script>
+  const sceneEl = document.querySelector('a-scene');
   const startButton = document.querySelector('#startButton');
-    const overlay = document.querySelector('#overlay');
-    const sceneEl = document.querySelector('a-scene');
+  const overlay = document.querySelector('#overlay');
 
+  const startAR = () => {
     startButton.addEventListener('click', async () => {
-    // 🔥 Start MindAR AFTER user interaction
-    await sceneEl.systems["mindar-image-system"].start();
+      try {
+        // Start MindAR
+        const arSystem = sceneEl.systems["mindar-image-system"];
+        if (arSystem) {
+          await arSystem.start();
+        }
 
-    // Hide overlay
-    overlay.style.display = 'none';
-    startButton.style.display = 'none';
+        // Hide the overlay
+        overlay.style.display = 'none';
+      } catch (err) {
+        console.error("AR failed to start:", err);
+      }
     });
+  };
+
+  // Check if scene is already loaded, otherwise wait for it
+  if (sceneEl.hasLoaded) {
+    startAR();
+  } else {
+    sceneEl.addEventListener('loaded', startAR);
+  }
 </script>
 
 
