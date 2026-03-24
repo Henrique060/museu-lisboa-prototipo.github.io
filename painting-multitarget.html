@@ -49,14 +49,20 @@
 
 
     <script>
+  let btnClicked = false;
   const startButton = document.querySelector('#startButton');
   const overlay = document.querySelector('#overlay');
 
   startButton.addEventListener('click', () => {
     // Hide the overlay
     overlay.style.display = 'none';
+    btnClicked = true;
    
   });
+  if(btnClicked){
+        startButton.style.display = 'none';
+  }
+  
 
   
 </script>
