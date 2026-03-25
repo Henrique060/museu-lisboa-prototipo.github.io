@@ -29,7 +29,8 @@
         <a-asset-item id="vaseModel" src="./public/models/vase.glb"></a-asset-item>
       </a-assets>
 
-      <a-camera position="0 0 0" look-controls="enabled: false" raycaster="objects: .clickable">
+      <a-camera position="0 0 0" look-controls="enabled: false">
+        <a-cursor raycaster="objects: .clickable" ray-origin="mouse" fuse="false"></a-cursor>
       </a-camera>
 
       <a-entity mindar-image-target="targetIndex: 0" id="marker1">
@@ -50,64 +51,35 @@
 
 
    <script>
-  const startButton = document.querySelector('#startButton');
-  const overlay = document.querySelector('#overlay');
-  const sceneEl = document.querySelector('a-scene');
-  const marker1 = document.querySelector('#marker1');
   const model1 = document.querySelector('#numberMark1Spawn');
+const marker1 = document.querySelector('#marker1');
+const startButton = document.querySelector('#startButton');
+const overlay = document.querySelector('#overlay');
 
-  // Start AR
-  startButton.addEventListener('click', () => {
-    overlay.style.display = 'none';
-  });
+startButton.addEventListener('click', () => {
+  overlay.style.display = 'none';
+});
 
-  // Ensure model is raycastable (VERY important for GLTF)
-  model1.addEventListener('model-loaded', () => {
-    model1.object3D.traverse((node) => {
-      if (node.isMesh) {
-        node.raycast = THREE.Mesh.prototype.raycast;
-      }
-    });
-  });
+// Direct listener on the model
+model1.addEventListener('click', () => {
+  console.log("Model tapped!");
+  alert("Tapped");
 
-  // Handle touch/click on scene
-  sceneEl.addEventListener('click', (event) => {
-    // No intersection = nothing tapped
-    if (!event.detail || !event.detail.intersection) return;
+  const existing = document.querySelector('#spawnedVase');
+  if (existing) {
+    existing.parentNode.removeChild(existing);
+    return;
+  }
 
-    const clickedEl = event.detail.intersection.object.el;
-
-    // Only react if it's our model
-    if (!clickedEl || clickedEl.id !== 'numberMark1Spawn') return;
-
-    console.log("Model tapped!");
-
-    // Toggle vase
-    const existing = document.querySelector('#spawnedVase');
-
-    if (existing) {
-      existing.remove();
-      return;
-    }
-
-    // Create vase
-    const vase = document.createElement('a-gltf-model');
-    vase.setAttribute('id', 'spawnedVase');
-    vase.setAttribute('src', '#vaseModel');
-    vase.setAttribute('position', '0 0 0');
-    vase.setAttribute('scale', '0.1 0.1 0.1');
-
-    // Optional: ensure vase is also raycastable (future-proof)
-    vase.addEventListener('model-loaded', () => {
-      vase.object3D.traverse((node) => {
-        if (node.isMesh) {
-          node.raycast = THREE.Mesh.prototype.raycast;
-        }
-      });
-    });
-
-    marker1.appendChild(vase);
-  });
+  const vase = document.createElement('a-gltf-model');
+  vase.setAttribute('id', 'spawnedVase');
+  vase.setAttribute('src', '#vaseModel');
+  // Position it slightly offset so it doesn't z-fight with the marker model
+  vase.setAttribute('position', '0 0.2 0'); 
+  vase.setAttribute('scale', '0.1 0.1 0.1');
+  
+  marker1.appendChild(vase);
+});
 </script>
 
 
