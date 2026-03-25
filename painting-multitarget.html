@@ -23,7 +23,7 @@
 
     <a-scene mindar-image="imageTargetSrc: ./public/markers/targets.mind; maxTrack:3;" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
       <a-assets>
-        <a-asset-item id="numberMark1" class="clickable" src="./public/models/numberMark1.glb"></a-asset-item>
+        <a-asset-item id="numberMark1" src="./public/models/numberMark1.glb"></a-asset-item>
         <a-asset-item id="numberMark2" src="./public/models/numberMark2.glb"></a-asset-item>
         <a-asset-item id="numberMark3" src="./public/models/numberMark3.glb"></a-asset-item>
       </a-assets>
@@ -31,7 +31,7 @@
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
       <a-entity mindar-image-target="targetIndex: 0">
-        <a-gltf-model rotation="0 0 0 " position="0 0 0" scale="0.1 0.1 0.1" src="#numberMark1" >
+        <a-gltf-model class="clickable" rotation="0 0 0 " position="0 0 0" scale="0.1 0.1 0.1" src="#numberMark1" >
         </a-gltf-model>
       </a-entity>
       
