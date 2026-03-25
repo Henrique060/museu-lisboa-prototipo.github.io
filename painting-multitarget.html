@@ -80,6 +80,7 @@ clickTarget.addEventListener('click', () => {
     return;
   }
 
+  clickTarget.setAttribute('material', 'opacity: 0'); // Make hitbox invisible
   const vase = document.createElement('a-gltf-model');
   vase.setAttribute('id', 'spawnedVase');
   vase.setAttribute('src', '#vaseModel');
@@ -87,7 +88,9 @@ clickTarget.addEventListener('click', () => {
   vase.setAttribute('scale', '0.3 0.3 0.3');
   
   marker1.appendChild(vase);
+
 });
+
 </script>
 
 
