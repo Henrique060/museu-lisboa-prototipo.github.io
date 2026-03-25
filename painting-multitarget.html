@@ -86,6 +86,7 @@ clickTarget.addEventListener('click', () => {
   const existing = document.querySelector('#spawnedVase');
   if (existing) {
     existing.remove();
+    marker1Mesh.setAttribute('visible', 'true');
     return;
   }
 
@@ -97,7 +98,7 @@ clickTarget.addEventListener('click', () => {
   
   marker1.appendChild(vase);
 
-  marker1Mesh.setAttribute('material', 'opacity: 0; transparent: true');
+  marker1Mesh.setAttribute('visible', 'false');
 });
 
 </script>
