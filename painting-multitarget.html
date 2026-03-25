@@ -44,7 +44,7 @@
         <a-box id="clickTarget" 
                 class="clickable" 
                 position="0 0 0" 
-                scale="0.7 0.7 0.7" 
+                scale="0.8 0.8 0.8" 
                 material="opacity: 0; transparent: true">
         </a-box>
 
@@ -52,17 +52,17 @@
                       id="model1"
                         rotation="180 0 0" 
                         position="0 0 0" 
-                        scale="0.4 0.4 0.4">
+                        scale="0.3 0.3 0.3">
         </a-gltf-model>
        </a-entity>
       
       <a-entity mindar-image-target="targetIndex: 1">
-        <a-gltf-model rotation="0 0 0 " position="0 0 0" scale="0.4 0.4 0.4" src="#numberMark2" >
+        <a-gltf-model rotation="0 0 0 " position="0 0 0" scale="0.3 0.3 0.3" src="#numberMark2" >
         </a-gltf-model>
       </a-entity>
 
       <a-entity mindar-image-target="targetIndex: 2">
-       <a-gltf-model rotation="0 0 0 " position="0 0 0" scale="0.4 0.4 0.4" src="#numberMark3" ></a-gltf-model>
+       <a-gltf-model rotation="0 0 0 " position="0 0 0" scale="0.3 0.3 0.3" src="#numberMark3" ></a-gltf-model>
       </a-entity>
     </a-scene>
 
@@ -85,8 +85,8 @@ clickTarget.addEventListener('click', () => {
   
   const existing = document.querySelector('#spawnedVase');
   if (existing) {
-    existing.remove();
     marker1Mesh.setAttribute('visible', 'true');
+    existing.remove();
     return;
   }
 
