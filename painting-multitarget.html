@@ -38,23 +38,23 @@
                 class="clickable" 
                 position="0 0 0" 
                 scale="0.5 0.5 0.5" 
-                material="opacity: 100">
+                material="opacity: 0; transparent: true">
         </a-box>
 
         <a-gltf-model src="#numberMark1" 
                         rotation="0 0 0" 
                         position="0 0 0" 
-                        scale="0.1 0.1 0.1">
+                        scale="0.2 0.2 0.2">
         </a-gltf-model>
        </a-entity>
       
       <a-entity mindar-image-target="targetIndex: 1">
-        <a-gltf-model rotation="0 0 0 " position="0 0 0" scale="0.1 0.1 0.1" src="#numberMark2" >
+        <a-gltf-model rotation="0 0 0 " position="0 0 0" scale="0.2 0.2 0.2" src="#numberMark2" >
         </a-gltf-model>
       </a-entity>
 
       <a-entity mindar-image-target="targetIndex: 2">
-       <a-gltf-model rotation="0 0 0 " position="0 0 0" scale="0.1 0.1 0.1" src="#numberMark3" ></a-gltf-model>
+       <a-gltf-model rotation="0 0 0 " position="0 0 0" scale="0.2 0.2 0.2" src="#numberMark3" ></a-gltf-model>
       </a-entity>
     </a-scene>
 
@@ -80,12 +80,11 @@ clickTarget.addEventListener('click', () => {
     return;
   }
 
-  clickTarget.setAttribute('material', 'opacity: 0'); // Make hitbox invisible
   const vase = document.createElement('a-gltf-model');
   vase.setAttribute('id', 'spawnedVase');
   vase.setAttribute('src', '#vaseModel');
   vase.setAttribute('position', '0 0 0'); // Lifted slightly
-  vase.setAttribute('scale', '0.3 0.3 0.3');
+  vase.setAttribute('scale', '0.5 0.5 0.5');
   
   marker1.appendChild(vase);
 
