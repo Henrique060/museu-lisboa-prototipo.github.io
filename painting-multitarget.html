@@ -34,9 +34,19 @@
       </a-camera>
 
       <a-entity mindar-image-target="targetIndex: 0" id="marker1">
-        <a-gltf-model id="numberMark1Spawn" class="clickable" rotation="0 0 0 " position="0 0 0" scale="0.1 0.1 0.1" src="#numberMark1" raycastable>
+        <a-box id="clickTarget" 
+                class="clickable" 
+                position="0 0 0" 
+                scale="0.5 0.5 0.5" 
+                material="opacity: 0; transparent: true">
+        </a-box>
+
+        <a-gltf-model src="#numberMark1" 
+                        rotation="0 0 0" 
+                        position="0 0 0" 
+                        scale="0.1 0.1 0.1">
         </a-gltf-model>
-      </a-entity>
+       </a-entity>
       
       <a-entity mindar-image-target="targetIndex: 1">
         <a-gltf-model rotation="0 0 0 " position="0 0 0" scale="0.1 0.1 0.1" src="#numberMark2" >
@@ -51,31 +61,29 @@
 
 
    <script>
-  const model1 = document.querySelector('#numberMark1Spawn');
+const clickTarget = document.querySelector('#clickTarget');
 const marker1 = document.querySelector('#marker1');
 const startButton = document.querySelector('#startButton');
 const overlay = document.querySelector('#overlay');
 
 startButton.addEventListener('click', () => {
   overlay.style.display = 'none';
+  console.log("AR Scene Active");
 });
 
-// Direct listener on the model
-model1.addEventListener('click', () => {
-  console.log("Model tapped!");
-  alert("Tapped");
-
+clickTarget.addEventListener('click', () => {
+  console.log("Hitbox tapped!");
+  
   const existing = document.querySelector('#spawnedVase');
   if (existing) {
-    existing.parentNode.removeChild(existing);
+    existing.remove();
     return;
   }
 
   const vase = document.createElement('a-gltf-model');
   vase.setAttribute('id', 'spawnedVase');
   vase.setAttribute('src', '#vaseModel');
-  // Position it slightly offset so it doesn't z-fight with the marker model
-  vase.setAttribute('position', '0 0.2 0'); 
+  vase.setAttribute('position', '0 0.1 0'); // Lifted slightly
   vase.setAttribute('scale', '0.1 0.1 0.1');
   
   marker1.appendChild(vase);
