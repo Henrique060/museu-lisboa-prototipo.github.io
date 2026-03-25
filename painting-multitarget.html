@@ -49,6 +49,7 @@
         </a-box>
 
         <a-gltf-model src="#numberMark1" 
+                      id="model1"
                         rotation="0 0 0" 
                         position="0 0 0" 
                         scale="0.2 0.2 0.2">
@@ -72,6 +73,7 @@ const clickTarget = document.querySelector('#clickTarget');
 const marker1 = document.querySelector('#marker1');
 const startButton = document.querySelector('#startButton');
 const overlay = document.querySelector('#overlay');
+const marker1Mesh = document.querySelector('#model1')
 
 startButton.addEventListener('click', () => {
   overlay.style.display = 'none';
@@ -95,7 +97,7 @@ clickTarget.addEventListener('click', () => {
   
   marker1.appendChild(vase);
 
-  marker1.setAttribute('material', 'opacity: 0; transparent: true');
+  marker1Mesh.setAttribute('material', 'opacity: 0; transparent: true');
 });
 
 </script>
