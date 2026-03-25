@@ -83,26 +83,22 @@ startButton.addEventListener('click', () => {
 clickTarget.addEventListener('click', () => {
   console.log("Hitbox tapped!");
   
-  const existingVase = document.querySelector('#spawnedVase');
-
-  if (existingVase) {
-    // Branch A: Vase exists, so we REMOVE it and SHOW the marker
-    existingVase.remove();
+  const existing = document.querySelector('#spawnedVase');
+  if (existing) {
+    existing.remove();
     marker1Mesh.setAttribute('visible', 'true');
-    console.log("Vase removed, marker shown");
-  } else {
-    // Branch B: Vase doesn't exist, so we CREATE it and HIDE the marker
-    const vase = document.createElement('a-gltf-model');
-    vase.setAttribute('id', 'spawnedVase');
-    vase.setAttribute('src', '#vaseModel');
-    vase.setAttribute('position', '0 0 0');
-    vase.setAttribute('rotation', '90 0 0'); // Fix vase rotation too!
-    vase.setAttribute('scale', '0.5 0.5 0.5');
-    
-    marker1.appendChild(vase);
-    marker1Mesh.setAttribute('visible', 'false');
-    console.log("Vase spawned, marker hidden");
+    return;
   }
+
+  const vase = document.createElement('a-gltf-model');
+  vase.setAttribute('id', 'spawnedVase');
+  vase.setAttribute('src', '#vaseModel');
+  vase.setAttribute('position', '0 0 0'); // Lifted slightly
+  vase.setAttribute('scale', '0.5 0.5 0.5');
+  
+  marker1.appendChild(vase);
+
+  marker1Mesh.setAttribute('visible', 'false');
 });
 
 </script>
