@@ -25,11 +25,10 @@
 </div>
 
 <a-scene 
-  cursor="rayOrigin: screen"
-  raycaster="objects: .clickable; far: 10000"
   mindar-image="imageTargetSrc: ./public/markers/targets.mind; maxTrack: 3"
   vr-mode-ui="enabled: false"
   device-orientation-permission-ui="enabled: false"
+  renderer="colorManagement: true"
 >
 
 <a-assets>
@@ -43,50 +42,20 @@
 
 <!-- MARKER 1 -->
 <a-entity mindar-image-target="targetIndex: 0" id="marker1">
-  <a-gltf-model class="clickable markerModel"
-    id="model1"
-    src="#m1"
-    scale="0.3 0.3 0.3">
-  </a-gltf-model>
-
-  <a-gltf-model 
-    id="vase1"
-    src="#vase"
-    visible="false"
-    scale="0.5 0.5 0.5">
-  </a-gltf-model>
+  <a-gltf-model id="model1" src="#m1" scale="0.5 0.5 0.5"></a-gltf-model>
+  <a-gltf-model id="vase1" src="#vase" visible="false" scale="0.8 0.8 0.8"></a-gltf-model>
 </a-entity>
 
 <!-- MARKER 2 -->
 <a-entity mindar-image-target="targetIndex: 1" id="marker2">
-  <a-gltf-model class="clickable markerModel"
-    id="model2"
-    src="#m2"
-    scale="0.3 0.3 0.3">
-  </a-gltf-model>
-
-  <a-gltf-model 
-    id="vase2"
-    src="#vase"
-    visible="false"
-    scale="0.5 0.5 0.5">
-  </a-gltf-model>
+  <a-gltf-model id="model2" src="#m2" scale="0.5 0.5 0.5"></a-gltf-model>
+  <a-gltf-model id="vase2" src="#vase" visible="false" scale="0.8 0.8 0.8"></a-gltf-model>
 </a-entity>
 
 <!-- MARKER 3 -->
 <a-entity mindar-image-target="targetIndex: 2" id="marker3">
-  <a-gltf-model class="clickable markerModel"
-    id="model3"
-    src="#m3"
-    scale="0.3 0.3 0.3">
-  </a-gltf-model>
-
-  <a-gltf-model 
-    id="vase3"
-    src="#vase"
-    visible="false"
-    scale="0.5 0.5 0.5">
-  </a-gltf-model>
+  <a-gltf-model id="model3" src="#m3" scale="0.5 0.5 0.5"></a-gltf-model>
+  <a-gltf-model id="vase3" src="#vase" visible="false" scale="0.8 0.8 0.8"></a-gltf-model>
 </a-entity>
 
 </a-scene>
@@ -100,28 +69,66 @@ startButton.addEventListener("click", () => {
   overlay.style.pointerEvents = "none";
 });
 
-// HANDLE ALL MARKERS
-function setupInteraction(markerId, modelId, vaseId) {
+// -------- SCREEN SPACE TAP DETECTION --------
+
+function getScreenPosition(obj, camera) {
+  const vector = new THREE.Vector3();
+  obj.object3D.getWorldPosition(vector);
+  vector.project(camera);
+
+  return {
+    x: (vector.x * 0.5 + 0.5) * window.innerWidth,
+    y: (-vector.y * 0.5 + 0.5) * window.innerHeight
+  };
+}
+
+function setupMarker(markerId, modelId, vaseId) {
   const marker = document.querySelector(markerId);
   const model = document.querySelector(modelId);
   const vase = document.querySelector(vaseId);
 
   let active = false;
 
-  model.addEventListener("click", () => {
-    if (!marker.object3D.visible) return; // only when tracked
+  document.body.addEventListener("click", (e) => {
+    if (!marker.object3D.visible) return;
 
-    active = !active;
+    const cam = document.querySelector("[camera]").getObject3D("camera");
 
-    model.setAttribute("visible", !active);
-    vase.setAttribute("visible", active);
+    const pos = getScreenPosition(model, cam);
+
+    const dx = e.clientX - pos.x;
+    const dy = e.clientY - pos.y;
+    const distance = Math.sqrt(dx*dx + dy*dy);
+
+    // 👇 Tap threshold (increase if needed)
+    if (distance < 120) {
+      active = !active;
+
+      // animation
+      if (active) {
+        model.setAttribute("visible", false);
+        vase.setAttribute("visible", true);
+
+        vase.setAttribute("animation", {
+          property: "scale",
+          from: "0 0 0",
+          to: "0.8 0.8 0.8",
+          dur: 300,
+          easing: "easeOutBack"
+        });
+
+      } else {
+        vase.setAttribute("visible", false);
+        model.setAttribute("visible", true);
+      }
+    }
   });
 }
 
 // INIT
-setupInteraction("#marker1", "#model1", "#vase1");
-setupInteraction("#marker2", "#model2", "#vase2");
-setupInteraction("#marker3", "#model3", "#vase3");
+setupMarker("#marker1", "#model1", "#vase1");
+setupMarker("#marker2", "#model2", "#vase2");
+setupMarker("#marker3", "#model3", "#vase3");
 
 </script>
 
