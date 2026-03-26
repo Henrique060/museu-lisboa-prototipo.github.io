@@ -36,6 +36,13 @@
         <a-asset-item id="vaseModel" src="./public/models/vase.glb"></a-asset-item>
       </a-assets>
 
+      <a-text id="debugText"
+            value="waiting..."
+            position="0 0.5 0"
+            scale="0.5 0.5 0.5"
+            color="yellow">
+        </a-text>
+
       <a-camera position="0 0 0" look-controls="enabled: false">
         <a-cursor 
             raycaster="objects: .clickable;"
@@ -50,9 +57,9 @@
                 src="#numberMark1" 
                 rotation="0 0 0" 
                 position="0 0 0" 
-                scale="0.1 0.1 0.1">
+                scale="1 1 1">
                 </a-gltf-model>
-        <a-box id="clickableBox1" raycastable class="clickable" position="0 0 0" scale="0.3 0.3 0.3" material="opacity: 0.2; transparent: true">
+        <a-box id="clickableBox1" raycastable class="clickable" position="0 0 0" scale="1 1 1" material="opacity: 0.2; transparent: true">
         </a-box>
         
         
@@ -76,19 +83,22 @@ const startButton = document.querySelector('#startButton'); //começar a exp de 
 const overlay = document.querySelector('#overlay'); //overlay AR 
 const marker1Mesh = document.querySelector('#model1') // modelo 3D do marcador 1
 const bboxMarker1 = document.querySelector('#clickableBox1')
+const debugText = document.querySelector('#debugText');
 
 startButton.addEventListener('mousedown', () => { //começar a experiencia
   overlay.style.display = 'none';
   console.log("AR Scene Active");
 });
 
-bboxMarker1.addEventListener('click', () => {
+
+bboxMarker1.addEventListener('mousedown', () => {
   console.log("Hitbox tapped!");
   
   const existing = document.querySelector('#spawnedVase');
   if (existing) {
     existing.remove();
     marker1Mesh.setAttribute('visible', 'true');
+    debugText.setAttribute('value', 'REMOVED VASE');
     return;
   }
 
@@ -100,6 +110,7 @@ bboxMarker1.addEventListener('click', () => {
   vase.setAttribute('scale', '1 1 1');
   
   marker1.appendChild(vase);
+  debugText.setAttribute('value', 'SPAWNED VASE');
 });
 
 </script>
