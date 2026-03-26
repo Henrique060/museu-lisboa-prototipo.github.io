@@ -41,13 +41,15 @@
       </a-camera>
 
       <a-entity mindar-image-target="targetIndex: 0" id="marker1">
-
-        <a-gltf-model src="#numberMark1" 
-                      id="model1"
-                      class="clickable"
-                        rotation="0 0 0" 
-                        position="0 0 0" 
-                        scale="0.3 0.3 0.3">
+        <a-box id="clickableBox1" class="clickable" position="0 0 0" scale="0.3 0.3 0.3" material="opacity: 0; transparent: true">
+            <a-gltf-model 
+                id="model1"
+                src="#numberMark1" 
+                rotation="0 0 0" 
+                position="0 0 0" 
+                scale="0.3 0.3 0.3">
+        </a-box>
+        
         </a-gltf-model>
        </a-entity>
       
@@ -67,14 +69,15 @@
 const marker1 = document.querySelector('#marker1'); // para root em spawn do modelo novo ao clicar 
 const startButton = document.querySelector('#startButton'); //começar a exp de AR 
 const overlay = document.querySelector('#overlay'); //overlay AR 
-const marker1Mesh = document.querySelector('#model1') // modelo 3D do marcador 1
+//const marker1Mesh = document.querySelector('#model1') // modelo 3D do marcador 1
+const bboxMarker1 = document.querySelector('#clickableBox1')
 
 startButton.addEventListener('click', () => { //começar a experiencia
   overlay.style.display = 'none';
   console.log("AR Scene Active");
 });
 
-marker1Mesh.addEventListener('click', () => {
+bboxMarker1.addEventListener('click', () => {
   console.log("Hitbox tapped!");
   
   const existing = document.querySelector('#spawnedVase');
