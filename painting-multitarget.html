@@ -41,12 +41,6 @@
       </a-camera>
 
       <a-entity mindar-image-target="targetIndex: 0" id="marker1">
-        <a-box id="clickTarget" 
-                class="clickable" 
-                position="0 0 0" 
-                scale="0.8 0.8 0.8" 
-                material="opacity: 0; transparent: true">
-        </a-box>
 
         <a-gltf-model src="#numberMark1" 
                       id="model1"
@@ -69,27 +63,27 @@
 
 
    <script>
-const clickTarget = document.querySelector('#clickTarget');
-const marker1 = document.querySelector('#marker1');
-const startButton = document.querySelector('#startButton');
-const overlay = document.querySelector('#overlay');
-const marker1Mesh = document.querySelector('#model1')
+const marker1 = document.querySelector('#marker1'); // para root em spawn do modelo novo ao clicar 
+const startButton = document.querySelector('#startButton'); //começar a exp de AR 
+const overlay = document.querySelector('#overlay'); //overlay AR 
+const marker1Mesh = document.querySelector('#model1') // modelo 3D do marcador 1
 
-startButton.addEventListener('click', () => {
+startButton.addEventListener('click', () => { //começar a experiencia
   overlay.style.display = 'none';
   console.log("AR Scene Active");
 });
 
-clickTarget.addEventListener('click', () => {
+marker1Mesh.addEventListener('click', () => {
   console.log("Hitbox tapped!");
   
   const existing = document.querySelector('#spawnedVase');
   if (existing) {
-    marker1Mesh.setAttribute('visible', 'true');
     existing.remove();
+    marker1Mesh.setAttribute('visible', 'true');
     return;
   }
 
+  marker1Mesh.setAttribute('visible', 'false');
   const vase = document.createElement('a-gltf-model');
   vase.setAttribute('id', 'spawnedVase');
   vase.setAttribute('src', '#vaseModel');
@@ -97,8 +91,6 @@ clickTarget.addEventListener('click', () => {
   vase.setAttribute('scale', '0.5 0.5 0.5');
   
   marker1.appendChild(vase);
-
-  marker1Mesh.setAttribute('visible', 'false');
 });
 
 </script>
