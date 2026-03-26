@@ -23,9 +23,7 @@
 
     <a-scene 
     cursor="rayOrigin: screen"    
-    mindar-image="imageTargetSrc: ./public/markers/targets.mind; maxTrack:3; uiScanning: #scanning-overlay; filterMinCF:0.001; filterBeta:0.01; missTolerance: 1; 
-        warmupTolerance: 5;
-        getMediaConstraints: {audio: false, video: { facingMode: 'environment', zoom: 1.0, width: {ideal: 1280}, height: {ideal: 720} }};" 
+    mindar-image="imageTargetSrc: ./public/markers/targets.mind; maxTrack:3;" 
         color-space="sRGB" 
         renderer="colorManagement: true, physicallyCorrectLights" 
         vr-mode-ui="enabled: false" 
@@ -48,13 +46,13 @@
       </a-camera>
 
       <a-entity mindar-image-target="targetIndex: 0" id="marker1">
-        <a-box id="clickableBox1" class="clickable" position="0 0 0" scale="1 1 1" material="opacity: 0.2; transparent: true"></a-box>
+        <a-box id="clickableBox1" class="clickable" position="0 0 0.3" scale="2 2 2" material="opacity: 0.2; transparent: true"></a-box>
         <a-gltf-model 
                 id="model1"
                 src="#numberMark1" 
                 rotation="0 0 0" 
                 position="0 0 0" 
-                scale="1 1 1">
+                scale="0.3 0.3 0.3">
                 </a-gltf-model>
         
         
