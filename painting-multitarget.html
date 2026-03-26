@@ -1,115 +1,129 @@
 <html>
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v7.0.0/dist/aframe-extras.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
-  </head>
-  <body>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+</head>
 
-    <style>
-      #overlay {
-        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(0,0,0,0.8); z-index: 9999;
-        display: flex; justify-content: center; align-items: center;
-      }
-      #overlay button { padding: 20px; font-size: 20px; cursor: pointer; }
-    </style>
+<body>
 
+<style>
+#overlay {
+  position: fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background: rgba(0,0,0,0.8);
+  z-index:9999;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+</style>
 
-    <div id="overlay">
-      <button id="startButton">Click to Start AR & Video</button>
-    </div>
+<div id="overlay">
+  <button id="startButton">Start AR</button>
+</div>
 
-    <a-scene 
-    cursor="rayOrigin: screen"    
-    mindar-image="imageTargetSrc: ./public/markers/targets.mind; maxTrack:3;" 
-        color-space="sRGB" 
-        renderer="colorManagement: true, physicallyCorrectLights" 
-        vr-mode-ui="enabled: false" 
-        device-orientation-permission-ui="enabled: false">
-      <a-assets>
-        <a-asset-item id="numberMark1" src="./public/models/numberMark1.glb"></a-asset-item>
-        <a-asset-item id="numberMark2" src="./public/models/numberMark2.glb"></a-asset-item>
-        <a-asset-item id="numberMark3" src="./public/models/numberMark3.glb"></a-asset-item>
-        <a-asset-item id="vaseModel" src="./public/models/vase.glb"></a-asset-item>
-      </a-assets>
+<a-scene 
+  cursor="rayOrigin: screen"
+  raycaster="objects: .clickable; far: 10000"
+  mindar-image="imageTargetSrc: ./public/markers/targets.mind; maxTrack: 3"
+  vr-mode-ui="enabled: false"
+  device-orientation-permission-ui="enabled: false"
+>
 
-      <a-text id="debugText"
-            value="waiting..."
-            position="0 0.5 0"
-            scale="0.5 0.5 0.5"
-            color="yellow">
-        </a-text>
+<a-assets>
+  <a-asset-item id="m1" src="./public/models/numberMark1.glb"></a-asset-item>
+  <a-asset-item id="m2" src="./public/models/numberMark2.glb"></a-asset-item>
+  <a-asset-item id="m3" src="./public/models/numberMark3.glb"></a-asset-item>
+  <a-asset-item id="vase" src="./public/models/vase.glb"></a-asset-item>
+</a-assets>
 
-      <a-camera position="0 0 0" look-controls="enabled: false">
-      </a-camera>
+<a-camera position="0 0 0" look-controls="enabled:false"></a-camera>
 
-      <a-entity mindar-image-target="targetIndex: 0" id="marker1">
-        <a-box id="clickableBox1" class="clickable" position="0 0 0.3" scale="2 2 2" material="opacity: 0.2; transparent: true"></a-box>
-        <a-gltf-model 
-                id="model1"
-                src="#numberMark1" 
-                rotation="0 0 0" 
-                position="0 0 0" 
-                scale="0.3 0.3 0.3">
-                </a-gltf-model>
-        
-        
-       </a-entity>
-      
-      <a-entity mindar-image-target="targetIndex: 1">
-        <a-gltf-model rotation="0 0 0 " position="0 0 0" scale="0.3 0.3 0.3" src="#numberMark2" >
-        </a-gltf-model>
-      </a-entity>
+<!-- MARKER 1 -->
+<a-entity mindar-image-target="targetIndex: 0" id="marker1">
+  <a-gltf-model class="clickable markerModel"
+    id="model1"
+    src="#m1"
+    scale="0.3 0.3 0.3">
+  </a-gltf-model>
 
-      <a-entity mindar-image-target="targetIndex: 2">
-       <a-gltf-model rotation="0 0 0 " position="0 0 0" scale="0.3 0.3 0.3" src="#numberMark3" ></a-gltf-model>
-      </a-entity>
-    </a-scene>
+  <a-gltf-model 
+    id="vase1"
+    src="#vase"
+    visible="false"
+    scale="0.5 0.5 0.5">
+  </a-gltf-model>
+</a-entity>
 
+<!-- MARKER 2 -->
+<a-entity mindar-image-target="targetIndex: 1" id="marker2">
+  <a-gltf-model class="clickable markerModel"
+    id="model2"
+    src="#m2"
+    scale="0.3 0.3 0.3">
+  </a-gltf-model>
 
+  <a-gltf-model 
+    id="vase2"
+    src="#vase"
+    visible="false"
+    scale="0.5 0.5 0.5">
+  </a-gltf-model>
+</a-entity>
 
-   <script>
-const marker1 = document.querySelector('#marker1'); // para root em spawn do modelo novo ao clicar 
-const startButton = document.querySelector('#startButton'); //começar a exp de AR 
-const overlay = document.querySelector('#overlay'); //overlay AR 
-const marker1Mesh = document.querySelector('#model1') // modelo 3D do marcador 1
-const bboxMarker1 = document.querySelector('#clickableBox1')
-const debugText = document.querySelector('#debugText');
+<!-- MARKER 3 -->
+<a-entity mindar-image-target="targetIndex: 2" id="marker3">
+  <a-gltf-model class="clickable markerModel"
+    id="model3"
+    src="#m3"
+    scale="0.3 0.3 0.3">
+  </a-gltf-model>
 
-startButton.addEventListener('touchstart', () => { //começar a experiencia
-  overlay.style.display = 'none';
-  overlay.style.pointerEvents = 'none'; // extra add to remove 
-  console.log("AR Scene Active");
+  <a-gltf-model 
+    id="vase3"
+    src="#vase"
+    visible="false"
+    scale="0.5 0.5 0.5">
+  </a-gltf-model>
+</a-entity>
+
+</a-scene>
+
+<script>
+const overlay = document.querySelector("#overlay");
+const startButton = document.querySelector("#startButton");
+
+startButton.addEventListener("click", () => {
+  overlay.style.display = "none";
+  overlay.style.pointerEvents = "none";
 });
 
+// HANDLE ALL MARKERS
+function setupInteraction(markerId, modelId, vaseId) {
+  const marker = document.querySelector(markerId);
+  const model = document.querySelector(modelId);
+  const vase = document.querySelector(vaseId);
 
-bboxMarker1.addEventListener('click', () => {
-  console.log("Hitbox tapped!");
-  
-  const existing = document.querySelector('#spawnedVase');
-  if (existing) {
-    existing.remove();
-    marker1Mesh.setAttribute('visible', 'true');
-    debugText.setAttribute('value', 'REMOVED VASE');
-    return;
-  }
+  let active = false;
 
-  marker1Mesh.setAttribute('visible', 'false');
-  const vase = document.createElement('a-gltf-model');
-  vase.setAttribute('id', 'spawnedVase');
-  vase.setAttribute('src', '#vaseModel');
-  vase.setAttribute('position', '0 0 0'); // Lifted slightly
-  vase.setAttribute('scale', '1 1 1');
-  
-  marker1.appendChild(vase);
-  debugText.setAttribute('value', 'SPAWNED VASE');
-});
+  model.addEventListener("click", () => {
+    if (!marker.object3D.visible) return; // only when tracked
+
+    active = !active;
+
+    model.setAttribute("visible", !active);
+    vase.setAttribute("visible", active);
+  });
+}
+
+// INIT
+setupInteraction("#marker1", "#model1", "#vase1");
+setupInteraction("#marker2", "#model2", "#vase2");
+setupInteraction("#marker3", "#model3", "#vase3");
 
 </script>
 
-
-
-  </body>
+</body>
 </html>
