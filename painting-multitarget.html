@@ -37,7 +37,11 @@
       </a-assets>
 
       <a-camera position="0 0 0" look-controls="enabled: false">
-        <a-cursor raycaster="objects: .clickable; far: 1000; interval: 100" ray-origin="mouse" fuse="false"></a-cursor>
+        <a-cursor 
+            raycaster="objects: .clickable; far: 1000"
+            ray-origin="mouse"
+            fuse="false">
+            </a-cursor>
       </a-camera>
 
       <a-entity mindar-image-target="targetIndex: 0" id="marker1">
@@ -48,7 +52,7 @@
                 position="0 0 0" 
                 scale="0.3 0.3 0.3">
                 </a-gltf-model>
-        <a-box id="clickableBox1" class="clickable" position="0 0 0" scale="1 1 1" material="opacity: 0; transparent: true">
+        <a-box id="clickableBox1" raycastable class="clickable" position="0 0 0" scale="0.3 0.3 0.3" material="opacity: 0.2; transparent: true">
         </a-box>
         
         
@@ -73,7 +77,7 @@ const overlay = document.querySelector('#overlay'); //overlay AR
 const marker1Mesh = document.querySelector('#model1') // modelo 3D do marcador 1
 const bboxMarker1 = document.querySelector('#clickableBox1')
 
-startButton.addEventListener('click', () => { //começar a experiencia
+startButton.addEventListener('mousedown', () => { //começar a experiencia
   overlay.style.display = 'none';
   console.log("AR Scene Active");
 });
