@@ -41,16 +41,17 @@
       </a-camera>
 
       <a-entity mindar-image-target="targetIndex: 0" id="marker1">
-        <a-box id="clickableBox1" class="clickable" position="0 0 0" scale="0.3 0.3 0.3" material="opacity: 0; transparent: true">
-            <a-gltf-model 
+        <a-gltf-model 
                 id="model1"
                 src="#numberMark1" 
                 rotation="0 0 0" 
                 position="0 0 0" 
                 scale="0.3 0.3 0.3">
+                </a-gltf-model>
+        <a-box id="clickableBox1" class="clickable" position="0 0 0" scale="1 1 1" material="opacity: 0; transparent: true">
         </a-box>
         
-        </a-gltf-model>
+        
        </a-entity>
       
       <a-entity mindar-image-target="targetIndex: 1">
@@ -69,7 +70,7 @@
 const marker1 = document.querySelector('#marker1'); // para root em spawn do modelo novo ao clicar 
 const startButton = document.querySelector('#startButton'); //começar a exp de AR 
 const overlay = document.querySelector('#overlay'); //overlay AR 
-//const marker1Mesh = document.querySelector('#model1') // modelo 3D do marcador 1
+const marker1Mesh = document.querySelector('#model1') // modelo 3D do marcador 1
 const bboxMarker1 = document.querySelector('#clickableBox1')
 
 startButton.addEventListener('click', () => { //começar a experiencia
@@ -92,7 +93,7 @@ bboxMarker1.addEventListener('click', () => {
   vase.setAttribute('id', 'spawnedVase');
   vase.setAttribute('src', '#vaseModel');
   vase.setAttribute('position', '0 0 0'); // Lifted slightly
-  vase.setAttribute('scale', '1.5 1.5 1.5');
+  vase.setAttribute('scale', '1 1 1');
   
   marker1.appendChild(vase);
 });
