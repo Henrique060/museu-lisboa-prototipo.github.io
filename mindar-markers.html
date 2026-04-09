@@ -20,11 +20,12 @@
       <button id="startButton">Click to Start AR & Video</button>
     </div>
 
-    <a-scene mindar-image="imageTargetSrc: ./public/markers/panfletoVasoSufr.mind;" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
+    <a-scene mindar-image="imageTargetSrc: ./public/markers/js-prototipo.mind;" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
       <a-assets>
         <a-asset-item id="avatarModel" src="./public/models/estatualisboa.glb"></a-asset-item>
         <a-asset-item id="vaseModel" src="./public/models/vase.glb"></a-asset-item>
         <a-asset-item id="stopSign" src="./public/models/stopsign.glb"></a-asset-item>
+        <a-asset-item id="js" src="./public/models/js-gajas.glb"></a-asset-item>
         <video 
           id="video" 
           autoplay 
@@ -39,7 +40,7 @@
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
       <a-entity mindar-image-target="targetIndex: 0">
-        <a-gltf-model rotation="0 -70 0 " position="0 -0.5 0.1" scale="0.03 0.03 0.03" src="#avatarModel" animation="property: position; to: 0 -0.5 0.1; dur: 1000; easing: easeInOutQuad; loop: true; dir: alternate">
+        <a-gltf-model rotation="0 -70 0 " position="0 -0.5 0.1" scale="0.03 0.03 0.03" src="#js" animation="property: position; to: 0 -0.5 0.1; dur: 1000; easing: easeInOutQuad; loop: true; dir: alternate">
         </a-gltf-model>
       </a-entity>
       
