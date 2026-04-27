@@ -1,66 +1,88 @@
 <html>
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
-    </head>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+</head>
+<body style="margin:0;overflow:hidden;">
 
-<body>
-    <a-scene
-        mindar-image="imageTargetSrc: ./public/markers/dJoao-target.mind;"
-        color-space="sRGB"
-        renderer="colorManagement: true, physicallyCorrectLights"
-        vr-mode-ui="enabled: false"
-        device-orientation-permission-ui="enabled: false">
+<a-scene
+  id="scene"
+  mindar-image="imageTargetSrc: ./public/markers/dJoao-target.mind;"
+  color-space="sRGB"
+  renderer="colorManagement: true, physicallyCorrectLights"
+  vr-mode-ui="enabled: false"
+  device-orientation-permission-ui="enabled: false">
 
-        <a-assets>
-            <a-asset-item id="gem" src="./public/models/gema.glb"></a-asset-item>
-            <a-asset-item id="silver" src="./public/models/prata.glb"></a-asset-item>
-            <a-asset-item id="gold" src="./public/models/ouro.glb"></a-asset-item>
-        </a-assets>
+  <a-assets>
+    <a-asset-item id="gem"    src="./public/models/gema.glb"></a-asset-item>
+    <a-asset-item id="silver" src="./public/models/prata.glb"></a-asset-item>
+    <a-asset-item id="gold"   src="./public/models/ouro.glb"></a-asset-item>
+  </a-assets>
 
-        <a-camera position="0 0 0" look-controls="enabled: false"
-            cursor="fuse: false; rayOrigin: mouse;"
-            raycaster="far: 100; objects: .clickable">
-        </a-camera>
+  <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-        <a-entity mindar-image-target="targetIndex:0" id="target">
-            <a-entity id="gem-entity" gltf-model="#gem" scale=".5 .5 .5" position="1 0 0" class="clickable"></a-entity>
-            <a-entity gltf-model="#silver" scale=".5 .5 .5" position="0 1 0"></a-entity>
-            <a-entity gltf-model="#gold" scale=".5 .5 .5" position="-1 0 0"></a-entity>
-        </a-entity>
-        </a-scene>
+  <a-entity mindar-image-target="targetIndex:0">
+    <a-entity id="gem-entity"    gltf-model="#gem"    scale=".5 .5 .5" position="1 0 0"></a-entity>
+    <a-entity id="silver-entity" gltf-model="#silver" scale=".5 .5 .5" position="0 1 0"></a-entity>
+    <a-entity id="gold-entity"   gltf-model="#gold"   scale=".5 .5 .5" position="-1 0 0"></a-entity>
+  </a-entity>
 
-        <script>
-        const gemEntity = document.querySelector('#gem-entity');
+</a-scene>
 
-        // Standard click (desktop / some Android)
-        gemEntity.addEventListener('click', animateGem);
+<script>
+  const scene = document.querySelector('#scene');
 
-        // Reliable iOS tap fallback via canvas touchend + raycaster
-        const scene = document.querySelector('a-scene');
-        scene.addEventListener('loaded', () => {
-            const canvas = scene.canvas;
-            canvas.addEventListener('touchend', (e) => {
-            e.preventDefault();
-            const touch = e.changedTouches[0];
-            const camera = document.querySelector('a-camera');
-            const raycaster = camera.components.raycaster;
+  scene.addEventListener('loaded', () => {
+    const canvas   = scene.canvas;
+    const camera   = document.querySelector('a-camera');
+    const gemEl    = document.querySelector('#gem-entity');
 
-            // Manually update raycaster from touch position
-            const rect = canvas.getBoundingClientRect();
-            const x = ((touch.clientX - rect.left) / rect.width) * 2 - 1;
-            const y = -((touch.clientY - rect.top) / rect.height) * 2 + 1;
-            raycaster.raycaster.setFromCamera({ x, y }, camera.getObject3D('camera'));
+    const raycaster = new THREE.Raycaster();
 
-            const intersects = raycaster.raycaster.intersectObject(gemEntity.object3D, true);
-            if (intersects.length > 0) animateGem();
-            });
+    function onTap(clientX, clientY) {
+      const rect = canvas.getBoundingClientRect();
+
+      // Normalised device coordinates
+      const ndc = new THREE.Vector2(
+        ((clientX - rect.left)  / rect.width)  * 2 - 1,
+       -((clientY - rect.top)   / rect.height) * 2 + 1
+      );
+
+      const threeCamera = camera.getObject3D('camera');
+      raycaster.setFromCamera(ndc, threeCamera);
+
+      // Collect all meshes inside gem entity
+      const meshes = [];
+      gemEl.object3D.traverse(obj => { if (obj.isMesh) meshes.push(obj); });
+
+      if (meshes.length === 0) return; // model not loaded yet
+
+      const hits = raycaster.intersectObjects(meshes, false);
+
+      if (hits.length > 0) {
+        gemEl.setAttribute('animation', {
+          property: 'position',
+          to: '0 0 0',
+          dur: 1000,
+          easing: 'easeInOutQuad'
         });
+      }
+    }
 
-        function animateGem() {
-            gemEntity.setAttribute('animation', 'property: position; to: 0 0 0; dur: 1000; easing: easeInOutQuad');
-        }
-    </script>
+    // Touch (iOS/Android)
+    canvas.addEventListener('touchstart', e => {
+      e.preventDefault();
+      const t = e.touches[0];
+      onTap(t.clientX, t.clientY);
+    }, { passive: false });
+
+    // Mouse (desktop testing)
+    canvas.addEventListener('click', e => {
+      onTap(e.clientX, e.clientY);
+    });
+  });
+</script>
+
 </body>
 </html>
