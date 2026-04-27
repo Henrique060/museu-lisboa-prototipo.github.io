@@ -19,13 +19,24 @@
         <a-asset-item id="gold" src="./public/models/ouro.glb"></a-asset-item>
         </a-assets>
 
-        <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+        <a-camera position="0 0 0" look-controls="enabled: false" cursor="fuse: false; rayOrigin: mouse;" raycaster="far: ${customFields.libVersion}; objects: .clickable"></a-camera>
         <a-entity mindar-image-target="targetIndex:0" id="target">
-            <a-entity gltf-model="#gem" scale=".5 .5 .5" position="1 0 0"></a-entity>
-            <a-entity gltf-model="#silver" scale=".5 .5 .5" position="0 1 0"></a-entity>
+            <a-entity gltf-model="#gem" scale=".5 .5 .5" position="1 0 0" class="clickable"></a-entity>
+            <a-entity gltf-model="#sixwlver" scale=".5 .5 .5" position="0 1 0"></a-entity>
             <a-entity gltf-model="#gold" scale=".5 .5 .5" position="-1 0 0"></a-entity>
         </a-entity>
-      
     </a-scene>
+
+    <script>
+        const gem = document.querySelector('#gem');
+        const silver = document.querySelector('#silver');
+        const gold = document.querySelector('#gold');
+
+        // touch gem
+        gem.addEventListener('click', () => {
+            // make gem float to 0 0 0
+            gem.setAttribute('animation', 'property: position; to: 0 0 0; dur: 1000; easing: easeInOutQuad');
+        });
+    </script>
 </body>
 </html>
