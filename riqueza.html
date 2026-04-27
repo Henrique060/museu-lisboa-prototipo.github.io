@@ -55,29 +55,43 @@
       raycaster.setFromCamera(ndc, threeCamera);
 
       // Collect all meshes inside gem entity
-      const meshes = [];
-      gemEl.object3D.traverse(obj => { if (obj.isMesh) meshes.push(obj); });
+      const meshes_gem = [];
+      const meshes_silver = [];
+      const meshes_gold = [];
+      gemEl.object3D.traverse(obj => { if (obj.isMesh) meshes_gem.push(obj); });
+      silverEl.object3D.traverse(obj => { if (obj.isMesh) meshes_silver.push(obj); });
+      goldEl.object3D.traverse(obj => { if (obj.isMesh) meshes_gold.push(obj); });
 
-      if (meshes.length === 0) return; // model not loaded yet
+      if (meshes_gem.length === 0) return; // model not loaded yet
+      if (meshes_silver.length === 0) return; // model not loaded yet
+      if (meshes_gold.length === 0) return; // model not loaded yet
 
-      const hits = raycaster.intersectObjects(meshes, false);
+      const hits_gems = raycaster.intersectObjects(meshes_gem, false);
+      const hits_silvers = raycaster.intersectObjects(meshes_silver, false);
+      const hits_golds = raycaster.intersectObjects(meshes_gold, false);
 
-      if (hits.length > 0) {
+      if (hits_gems.length > 0) {
         gemEl.setAttribute('animation', {
           property: 'position',
           to: '0 0.1 0',
           dur: 1000,
           easing: 'easeInOutQuad'
         });
+      }
+
+      if (hits_silvers.length > 0) {
         silverEl.setAttribute('animation', {
           property: 'position',
-          to: '-0.1 0.15 0 0',
+          to: '0.15 0.15 0',
           dur: 1000,
           easing: 'easeInOutQuad'
         });
+      }
+
+      if (hits_golds.length > 0) {
         goldEl.setAttribute('animation', {
           property: 'position',
-          to: '0.1 0.1 0',
+          to: '-0.15 0.15 0',
           dur: 1000,
           easing: 'easeInOutQuad'
         });
