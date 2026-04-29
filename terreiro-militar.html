@@ -1,0 +1,79 @@
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- A-Frame -->
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+
+  <!-- MindAR -->
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+</head>
+
+<body style="margin:0; overflow:hidden;">
+
+<a-scene
+  mindar-image="imageTargetSrc: ./public/markers/terreiro-militar-marker.mind;"
+  color-space="sRGB"
+  renderer="colorManagement: true, physicallyCorrectLights"
+  vr-mode-ui="enabled: false"
+  device-orientation-permission-ui="enabled: false">
+
+  <!-- Camera -->
+  <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+
+  <!-- Marker target -->
+  <a-entity mindar-image-target="targetIndex: 0">
+
+    <!-- Text 1 -->
+    <a-text
+      value="Lorem Ipsum frase 1"
+      position="0 0.5 0"
+      scale="0.5 0.5 0.5"
+      align="center"
+      color="#FFFFFF"
+      width="2"
+      side="double"
+      billboard>
+    </a-text>
+
+    <!-- Text 2 -->
+    <a-text
+      value="Lorem Ipsum frase 2"
+      position="0 -0.2 0"
+      scale="0.5 0.5 0.5"
+      align="center"
+      color="#FFD700"
+      width="2"
+      side="double"
+      billboard>
+    </a-text>
+
+    <!-- Text 3 -->
+    <a-text
+      value="Lorem Ipsum frase 3"
+      position="0 -0.9 0"
+      scale="0.5 0.5 0.5"
+      align="center"
+      color="#00FFFF"
+      width="2"
+      side="double"
+      billboard>
+    </a-text>
+
+  </a-entity>
+
+</a-scene>
+
+<!-- Billboard component (makes text face camera) -->
+<script>
+AFRAME.registerComponent('billboard', {
+  tick: function () {
+    this.el.object3D.lookAt(
+      this.el.sceneEl.camera.el.object3D.position
+    );
+  }
+});
+</script>
+
+</body>
+</html>
