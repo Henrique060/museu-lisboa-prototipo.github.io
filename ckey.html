@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <video id="webcamVideo" style="display: none;"></video>
+    <canvas id="displayCanvas" style="background-color: magenta;"></canvas>
+    <button onclick="startWebcam(); this.parentElement.removeChild(this)">Start webcam</button>
+    <script type="text/javascript">
+      function startWebcam() {
+        const webcamVideoEl = document.getElementById("webcamVideo");
+        const blitCanvas = new OffscreenCanvas(0, 0);  // size dynamically assigned per frame
+        const blitCtx = blitCanvas.getContext("2d");
+        const displayCanvasEl = document.getElementById("displayCanvas");
+        const displayCtx = displayCanvasEl.getContext("2d");
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } }).then(stream => {
+            webcamVideoEl.srcObject = stream;
+            webcamVideoEl.play();
+            function processFrame(now, metadata) {
+              // downsample to this width (more sophisticated could dynamically choose size)
+              const canvasWidth = 320;
+
+              // use aspect ratio of latest frame
+              const height = canvasWidth * metadata.height/metadata.width;
+
+              // note this clears the canvases (at least in Chrome)
+              blitCanvas.width = canvasWidth;
+              blitCanvas.height = height;
+              displayCanvasEl.width = canvasWidth;
+              displayCanvasEl.height = height;
+
+              // Downsamples video to canvas size
+              blitCtx.drawImage(webcamVideoEl, 0, 0, canvasWidth, height);
+              const imageData = blitCtx.getImageData(0, 0, canvasWidth, height);
+
+              const numPixels = imageData.data.length / 4;
+              for (let i = 0; i < numPixels; i++) {
+                const r = imageData.data[i * 4 + 0];
+                const g = imageData.data[i * 4 + 1];
+                const b = imageData.data[i * 4 + 2];
+                if (g > 100 && r < 100) imageData.data[i * 4 + 3] = 0;  // crude green screen
+              }
+              displayCtx.putImageData(imageData, 0, 0);
+              webcamVideoEl.requestVideoFrameCallback(processFrame);
+            }
+            webcamVideoEl.requestVideoFrameCallback(processFrame);
+        }).catch(error => {
+          console.error(error);
+        });
+      }
+    </script>
+  </body>
+</html>
